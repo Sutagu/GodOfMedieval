@@ -3,31 +3,32 @@ using System.Collections;
 
 public class warrior_blue_movement : MonoBehaviour
 {
-    public float speed = 2;
+    public float speed = 1.5f;
     public int facingDirection = 1;
     public Rigidbody2D rb;
     public Animator anim;
     public float updateInterval = 2f;
-
+    public bool isMoving = true;
+    public float horizontal;
+    public float vertical;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(updateRandomMovement()); 
+        StartCoroutine(UpdateRandomMovement());
+        Debug.Log("Script Started!");
     }
 
-    private IEnumerator updateRandomMovement()
+    private IEnumerator UpdateRandomMovement()
     {
         while (true)
         {
-            yield return new WaitForSeconds(updateInterval);
+            if (isMoving)
+            {
+                horizontal = Random.Range(-1f, 1f);
+                vertical = Random.Range(-1f, 1f);
+                Vector2 moveDir = new Vector2(horizontal, vertical).normalized;
 
-            //float horizontal = (Random.Range(0, 1f) > 0.5 ? Random.Range(5f,10f) : Random.Range(-10f,-5f));
-            //float vertical = (Random.Range(0, 1f) > 0.5 ? Random.Range(5f, 10f) : Random.Range(-10f, -5f));
-      
-                float horizontal = Random.Range(-0.5f,0.5f);
-                float vertical = Random.Range(-0.5f,0.5f);
-
-                if (horizontal > 0 && transform.localScale.x < 0 || horizontal < 0 && transform.localScale.x > 0)
+                if ((horizontal > 0 && transform.localScale.x < 0) || (horizontal < 0 && transform.localScale.x > 0))
                 {
                     Flip();
                 }
@@ -35,17 +36,44 @@ public class warrior_blue_movement : MonoBehaviour
                 anim.SetFloat("horizontal", Mathf.Abs(horizontal));
                 anim.SetFloat("vertical", Mathf.Abs(vertical));
 
+                rb.linearVelocity = moveDir * speed;
 
-                rb.linearVelocity = new Vector2(horizontal, vertical).normalized * speed;
+                yield return new WaitForSeconds(1.5f);
 
-                yield return new WaitForSeconds(3f);
                 rb.linearVelocity = Vector2.zero;
-            horizontal = 0;
-            vertical = 0;
+                anim.SetFloat("horizontal", 0);
+                anim.SetFloat("vertical", 0);
+            }
+
+            yield return new WaitForSeconds(updateInterval);
+        }
+    }
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("On Collision is called");
+        if (collision.gameObject.CompareTag("Collision"))
+        {
+            Debug.Log("Player has collided");
+ 
+            horizontal = -horizontal ;
+            vertical = -vertical ;
+            if ((horizontal > 0 && transform.localScale.x < 0) || (horizontal < 0 && transform.localScale.x > 0))
+            {
+                Flip();
+            }
+
+            rb.linearVelocity = new Vector2(horizontal, vertical).normalized;
             anim.SetFloat("horizontal", Mathf.Abs(horizontal));
             anim.SetFloat("vertical", Mathf.Abs(vertical));
-
+            StartCoroutine(resumeMovement());
         }
+    }
+
+    IEnumerator resumeMovement()
+    {
+        isMoving = false;
+        yield return new WaitForSeconds(updateInterval);
+        isMoving = true;
     }
 
     // Update is called once per frame

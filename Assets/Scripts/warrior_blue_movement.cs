@@ -11,11 +11,17 @@ public class warrior_blue_movement : MonoBehaviour
     public bool isMoving = true;
     public float horizontal;
     public float vertical;
+    public bool playerControl = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (!playerControl)
+        {
         StartCoroutine(UpdateRandomMovement());
+
         Debug.Log("Script Started!");
+        }
     }
 
     private IEnumerator UpdateRandomMovement()
@@ -24,6 +30,7 @@ public class warrior_blue_movement : MonoBehaviour
         {
             if (isMoving)
             {
+                updateInterval = Random.Range(1f, 4f);
                 horizontal = Random.Range(-1f, 1f);
                 vertical = Random.Range(-1f, 1f);
                 Vector2 moveDir = new Vector2(horizontal, vertical).normalized;
@@ -72,6 +79,7 @@ public class warrior_blue_movement : MonoBehaviour
     IEnumerator resumeMovement()
     {
         isMoving = false;
+        updateInterval = Random.Range(1f, 4f);
         yield return new WaitForSeconds(updateInterval);
         isMoving = true;
     }

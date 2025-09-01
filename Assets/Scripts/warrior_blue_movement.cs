@@ -18,9 +18,9 @@ public class warrior_blue_movement : MonoBehaviour
     {
         if (!playerControl)
         {
-        StartCoroutine(UpdateRandomMovement());
+            StartCoroutine(UpdateRandomMovement());
 
-        Debug.Log("Script Started!");
+            Debug.Log("Script Started!");
         }
     }
 
@@ -61,9 +61,9 @@ public class warrior_blue_movement : MonoBehaviour
         if (collision.gameObject.CompareTag("Collision"))
         {
             Debug.Log("Player has collided");
- 
-            horizontal = -horizontal ;
-            vertical = -vertical ;
+
+            horizontal = -horizontal;
+            vertical = -vertical;
             if ((horizontal > 0 && transform.localScale.x < 0) || (horizontal < 0 && transform.localScale.x > 0))
             {
                 Flip();
@@ -84,23 +84,26 @@ public class warrior_blue_movement : MonoBehaviour
         isMoving = true;
     }
 
-    // Update is called once per frame
-    //void FixedUpdate()
-    //{
-    //    float horizontal = Input.GetAxis("Horizontal");
-    //    float vertical = Input.GetAxis("Vertical");
+    
+    void FixedUpdate()
+    {
+        if (playerControl)
+        {
+            float horizontal = Input.GetAxis("Horizontal");
+            float vertical = Input.GetAxis("Vertical");
 
-    //    if(horizontal > 0 && transform.localScale.x < 0 ||  horizontal < 0 && transform.localScale.x > 0)
-    //    {
-    //        Flip();
-    //    }
+            if (horizontal > 0 && transform.localScale.x < 0 || horizontal < 0 && transform.localScale.x > 0)
+            {
+                Flip();
+            }
 
-    //    anim.SetFloat("horizontal", Mathf.Abs(horizontal));
-    //    anim.SetFloat("vertical", Mathf.Abs(vertical));
+            anim.SetFloat("horizontal", Mathf.Abs(horizontal));
+            anim.SetFloat("vertical", Mathf.Abs(vertical));
 
 
-    //    rb.linearVelocity = new Vector2(horizontal, vertical).normalized * speed;
-    //}
+            rb.linearVelocity = new Vector2(horizontal, vertical).normalized * speed;
+        }
+    }
 
     void Flip() 
     {

@@ -2,24 +2,28 @@ using UnityEngine;
 
 public class elevation_exit : MonoBehaviour
 {
-    public Collider2D[] mountainColliders;
-    public Collider2D[] mountainBoundary;
-
-    public void OnTriggerEnter2D(Collider2D collision)
+    //public Collider2D[] mountainColliders;
+    //public Collider2D[] mountainBoundary;
+    public string Character = "Character";
+    public void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Character Elevated"))
         {
-            foreach (Collider2D mountain in mountainColliders)
-            {
-                mountain.enabled = true;
+            Debug.Log("Character layer is indeed equal to Character Elevated, now converting to Character");
+            collision.gameObject.layer = LayerMask.NameToLayer(Character);
+            collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 15;
 
-            }
-            foreach (Collider2D boundary in mountainBoundary)
-            {
-                boundary.enabled = false;
+            Debug.Log(LayerMask.LayerToName(collision.gameObject.layer));
+            //foreach (Collider2D mountain in mountainColliders)
+            //{
+            //    Physics2D.IgnoreCollision(mountain, other, true);
 
-            }
-            collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 5;
+            //}
+            //foreach (Collider2D boundary in mountainBoundary)
+            //{
+            //    Physics2D.IgnoreCollision(boundary, other, false);
+
+            //}
         }
     }
 }

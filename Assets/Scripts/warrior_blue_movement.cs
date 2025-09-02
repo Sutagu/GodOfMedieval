@@ -60,7 +60,7 @@ public class warrior_blue_movement : MonoBehaviour
         Debug.Log("On Collision is called");
         if (collision.gameObject.CompareTag("Collision"))
         {
-            Debug.Log("Player has collided");
+            Debug.Log("Warrior has collided");
 
             horizontal = -horizontal;
             vertical = -vertical;
@@ -76,7 +76,7 @@ public class warrior_blue_movement : MonoBehaviour
         }
     }
 
-    IEnumerator resumeMovement()
+    public IEnumerator resumeMovement()
     {
         isMoving = false;
         updateInterval = Random.Range(1f, 4f);

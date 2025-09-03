@@ -29,7 +29,7 @@ public class warrior_blue_movement : MonoBehaviour
         while (true)
         {
             if (isMoving)
-            {
+            { 
                 updateInterval = Random.Range(1f, 4f);
                 horizontal = Random.Range(-1f, 1f);
                 vertical = Random.Range(-1f, 1f);
@@ -56,12 +56,9 @@ public class warrior_blue_movement : MonoBehaviour
         }
     }
     void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("On Collision is called");
+    { 
         if (collision.gameObject.CompareTag("Collision"))
-        {
-            Debug.Log("Warrior has collided");
-
+        { 
             horizontal = -horizontal;
             vertical = -vertical;
             if ((horizontal > 0 && transform.localScale.x < 0) || (horizontal < 0 && transform.localScale.x > 0))

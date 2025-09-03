@@ -11,19 +11,15 @@ public class elevation_entry : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Character"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Character") && collision is CapsuleCollider2D)
         {
-            Debug.Log("Character layer is indeed equal to Character, now converting to Elevated");
             collision.gameObject.layer = LayerMask.NameToLayer(CharacterElevated);
-
             Debug.Log(LayerMask.LayerToName(collision.gameObject.layer));
-
             collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 15;
             return;
         }
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Character Elevated"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Character Elevated") && collision is CapsuleCollider2D)
         {
-            Debug.Log("Character layer is indeed equal to Character Elevated, now converting to Character");
             collision.gameObject.layer = LayerMask.NameToLayer(Character);
             collision.gameObject.GetComponent<SpriteRenderer>().sortingOrder = 15;
 

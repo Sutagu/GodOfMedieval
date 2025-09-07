@@ -29,7 +29,8 @@ public class warrior_blue_movement : MonoBehaviour
         while (true)
         {
             if (isMoving)
-            { 
+            {
+                Debug.Log("Im still moving");
                 updateInterval = Random.Range(1f, 4f);
                 horizontal = Random.Range(-1f, 1f);
                 vertical = Random.Range(-1f, 1f);

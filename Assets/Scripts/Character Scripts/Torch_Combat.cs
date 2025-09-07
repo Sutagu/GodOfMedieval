@@ -4,6 +4,7 @@ public class Torch_Combat : MonoBehaviour
 {
     //Script
     private warrior_blue_movement Movement;
+    private AttackPoint Weapon;
 
     //Gameobject components
     private Rigidbody2D rb;
@@ -16,17 +17,18 @@ public class Torch_Combat : MonoBehaviour
     public int damage = 15;
     private EnemyState enemyState;
     private bool hasRun = false;
-    public Transform AttackPoint;
+    private bool hasChased = false;
 
-    //Used in update for debugging states
-    //private float timer = 0f;
-    //private float interval = 1f;
+    //Used in update for debugging states used with -= Time.deltaTime;
+    //private float timer = 1f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         Movement = GetComponent<warrior_blue_movement>();
+        Transform child = transform.GetChild(0);
+        Weapon = child.GetComponent<AttackPoint>();
         enemyState = EnemyState.Exit;
     }
     //Causing damage when collided
@@ -50,16 +52,6 @@ public class Torch_Combat : MonoBehaviour
         {
             Exit();
         }
-
-        //timer += Time.deltaTime;
-        //if (timer >= interval)
-        //{
-        //    timer = 0f;
-        //    foreach (AnimatorControllerParameter param in anim.parameters)
-        //    {
-        //        Debug.Log($"Name: {param.name}, Value: {anim.GetBool(param.name)}");
-        //    }
-        //}
     }
 
     void Chase()
@@ -69,8 +61,7 @@ public class Torch_Combat : MonoBehaviour
         float x = (targetPos.x - selfPos.x);
         float y = (targetPos.y - selfPos.y);
         float distance = Vector2.Distance(selfPos, targetPos);
-        //float distance = Mathf.Sqrt(x * x + y * y);
-        
+
         if (distance < attackRange)
         {
 
@@ -96,18 +87,24 @@ public class Torch_Combat : MonoBehaviour
         float y = (targetPos.y - selfPos.y);
         float distance = Mathf.Sqrt(x * x + y * y);
 
+        if (y > 0.7f) anim.SetBool("IsAttackingUp", true);
+        else if (y < -0.7f) anim.SetBool("isAttackingDown", true);
+        else anim.SetBool("isAttacking", true);
+
         if ((x > 0 && transform.localScale.x < 0) || (x < 0 && transform.localScale.x > 0))
         {
             Movement.facingDirection *= -1;
             transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
         }
-
-        
-        if (distance > attackRange)
+        if (distance > attackRange + 0.5f)
         {
             ChangeState(EnemyState.Chasing);
         }
     }
+
+    void EnableHit() => Weapon.EnableAttack();
+    void DisableHit() => Weapon.DisableAttack();
+    
     void Exit()
     {
         rb.linearVelocity = Vector2.zero;
@@ -116,14 +113,16 @@ public class Torch_Combat : MonoBehaviour
         StartCoroutine(Movement.resumeMovement());
         hasRun = true;
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Warrior"))
+        if(collision.gameObject.CompareTag("Warrior") && !hasChased)
         {
+            //Debug.Log("Entering trigger");
             Movement.isMoving = false;
             target = collision.gameObject.transform;
             anim.SetFloat("horizontal", 0);
             anim.SetFloat("vertical", 0);
+            hasChased = true;
             ChangeState(EnemyState.Chasing);
             
         }
@@ -133,6 +132,8 @@ public class Torch_Combat : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Warrior"))
         {
+            //Debug.Log("Exiting out of trigger");
+            hasChased = false;
             ChangeState(EnemyState.Exit);
         }
     }
@@ -140,6 +141,7 @@ public class Torch_Combat : MonoBehaviour
     void ChangeState(EnemyState newState)
     {
         Debug.Log("Changing state to:" + newState);
+        Movement.isMoving = false;
         switch (enemyState)
         {
             case EnemyState.Idle:
@@ -150,6 +152,8 @@ public class Torch_Combat : MonoBehaviour
                 break;
             case EnemyState.Attacking:
                 anim.SetBool("isAttacking", false);
+                anim.SetBool("IsAttackingUp", false);
+                anim.SetBool("isAttackingDown", false);
                 break;
             case EnemyState.Exit:
                 anim.SetBool("isExit", false);
@@ -167,9 +171,6 @@ public class Torch_Combat : MonoBehaviour
                 break;
             case EnemyState.Chasing:
                 anim.SetBool("isChasing", true);
-                break;
-            case EnemyState.Attacking:
-                anim.SetBool("isAttacking", true);
                 break;
             case EnemyState.Exit:
                 anim.SetBool("isExit", true);

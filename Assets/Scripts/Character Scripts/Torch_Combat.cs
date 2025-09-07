@@ -102,7 +102,7 @@ public class Torch_Combat : MonoBehaviour
         }
     }
 
-    void EnableHit() => Weapon.EnableAttack();
+    void EnableHit(string direction) => Weapon.EnableAttack(direction);
     void DisableHit() => Weapon.DisableAttack();
     
     void Exit()

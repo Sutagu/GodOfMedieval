@@ -129,12 +129,13 @@ GameObject:
   m_Component:
   - component: {fileID: 186964161}
   - component: {fileID: 186964160}
+  - component: {fileID: 186964164}
   - component: {fileID: 186964159}
   - component: {fileID: 186964158}
-  - component: {fileID: 186964162}
   - component: {fileID: 186964163}
-  - component: {fileID: 186964164}
   - component: {fileID: 186964165}
+  - component: {fileID: 186964166}
+  - component: {fileID: 186964168}
   m_Layer: 3
   m_Name: Torch_Red_0
   m_TagString: GoblinTorch
@@ -277,27 +278,6 @@ Transform:
   - {fileID: 295988540}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &186964162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186964157}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33ccec2ddae039d4f8e8b8b9179cc0a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 1.5
-  facingDirection: 1
-  rb: {fileID: 186964158}
-  anim: {fileID: 186964163}
-  updateInterval: 2
-  isMoving: 1
-  horizontal: 0
-  vertical: 0
-  playerControl: 0
 --- !u!95 &186964163
 Animator:
   serializedVersion: 7
@@ -371,6 +351,35 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 1.5791783, y: -0.067539215}
   m_Radius: 2.5828738
+--- !u!114 &186964166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186964157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77593c6a5d7a63e4d888896c762b86da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 100
+  maxHealth: 100
+--- !u!114 &186964168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186964157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a041ce1c611404097a10e4ebd7d316, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  facingDirection: 1
+  isRandom: 1
+  playerControl: 0
 --- !u!1 &259064316
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,7 +918,7 @@ Tilemap:
       - {fileID: -1595454639, guid: d4ec4c6d36607294ea8347f9747402b5, type: 3}
       - {fileID: -818778348, guid: d4ec4c6d36607294ea8347f9747402b5, type: 3}
       - {fileID: -1087797464, guid: d4ec4c6d36607294ea8347f9747402b5, type: 3}
-      m_AnimationSpeed: 5
+      m_AnimationSpeed: 5.0000005
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -2, y: -2, z: 0}
@@ -2476,9 +2485,9 @@ GameObject:
   - component: {fileID: 934614251}
   - component: {fileID: 934614250}
   - component: {fileID: 934614249}
-  - component: {fileID: 934614248}
   - component: {fileID: 934614253}
   - component: {fileID: 934614254}
+  - component: {fileID: 934614256}
   m_Layer: 3
   m_Name: Warrior_Blue_0
   m_TagString: Warrior
@@ -2486,27 +2495,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &934614248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 934614247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33ccec2ddae039d4f8e8b8b9179cc0a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
-  facingDirection: 1
-  rb: {fileID: 934614249}
-  anim: {fileID: 934614253}
-  updateInterval: 2
-  isMoving: 1
-  horizontal: 0
-  vertical: 0
-  playerControl: 0
 --- !u!50 &934614249
 Rigidbody2D:
   serializedVersion: 5
@@ -2675,8 +2663,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77593c6a5d7a63e4d888896c762b86da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 100
+  currentHealth: 400
   maxHealth: 100
+--- !u!114 &934614256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934614247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a041ce1c611404097a10e4ebd7d316, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  facingDirection: 1
+  isRandom: 1
+  playerControl: 0
 --- !u!1 &976652233
 GameObject:
   m_ObjectHideFlags: 0
@@ -8141,7 +8144,7 @@ Tilemap:
       - {fileID: -570465625, guid: d4ec4c6d36607294ea8347f9747402b5, type: 3}
       - {fileID: 762930240, guid: d4ec4c6d36607294ea8347f9747402b5, type: 3}
       - {fileID: 532053134, guid: d4ec4c6d36607294ea8347f9747402b5, type: 3}
-      m_AnimationSpeed: 5
+      m_AnimationSpeed: 5.0000005
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 10, y: -3, z: 0}

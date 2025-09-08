@@ -66,7 +66,6 @@ public class warrior_blue_movement : MonoBehaviour
             {
                 Flip();
             }
-
             rb.linearVelocity = new Vector2(horizontal, vertical).normalized;
             anim.SetFloat("horizontal", Mathf.Abs(horizontal));
             anim.SetFloat("vertical", Mathf.Abs(vertical));

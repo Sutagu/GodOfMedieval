@@ -3,7 +3,7 @@ using UnityEngine;
 public class Torch_Combat : MonoBehaviour
 {
     //Script
-    private warrior_blue_movement Movement;
+    private RNGMovement Movement;
     private AttackPoint Weapon;
 
     //Gameobject components
@@ -26,7 +26,7 @@ public class Torch_Combat : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        Movement = GetComponent<warrior_blue_movement>();
+        Movement = GetComponent<RNGMovement>();
         Transform child = transform.GetChild(0);
         Weapon = child.GetComponent<AttackPoint>();
         enemyState = EnemyState.Exit;
@@ -110,7 +110,7 @@ public class Torch_Combat : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         anim.SetFloat("horizontal", 0);
         anim.SetFloat("vertical", 0);
-        StartCoroutine(Movement.resumeMovement());
+        StartCoroutine(Movement.resumeRNG());
         hasRun = true;
     }
     private void OnTriggerStay2D(Collider2D collision)
@@ -118,7 +118,7 @@ public class Torch_Combat : MonoBehaviour
         if(collision.gameObject.CompareTag("Warrior") && !hasChased)
         {
             //Debug.Log("Entering trigger");
-            Movement.isMoving = false;
+            Movement.isRandom = false;
             target = collision.gameObject.transform;
             anim.SetFloat("horizontal", 0);
             anim.SetFloat("vertical", 0);
@@ -141,7 +141,7 @@ public class Torch_Combat : MonoBehaviour
     void ChangeState(EnemyState newState)
     {
         Debug.Log("Changing state to:" + newState);
-        Movement.isMoving = false;
+        Movement.isRandom = false;
         switch (enemyState)
         {
             case EnemyState.Idle:

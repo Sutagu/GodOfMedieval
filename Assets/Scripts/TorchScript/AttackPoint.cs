@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AttackPoint : MonoBehaviour
 {
-    private int damage = 15;
+    public int damage = 1;
     public PolygonCollider2D attackCollider;
 
     private void Awake()

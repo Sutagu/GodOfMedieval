@@ -28,7 +28,7 @@ public class RNGMovement : MonoBehaviour
     {
         while (true)
         {
-            if (isRandom)
+            if (isRandom && !anim.GetBool("isAtk"))
             {
                 Debug.Log("Randomly moving");
                 interval = RNGRange(true);

@@ -140,7 +140,7 @@ public class Torch_Combat : MonoBehaviour
 
     void ChangeState(EnemyState newState)
     {
-        Debug.Log("Changing state to:" + newState);
+        //Debug.Log("Changing state to:" + newState);
         Movement.isRandom = false;
         switch (enemyState)
         {
@@ -154,6 +154,7 @@ public class Torch_Combat : MonoBehaviour
                 anim.SetBool("isAttacking", false);
                 anim.SetBool("IsAttackingUp", false);
                 anim.SetBool("isAttackingDown", false);
+                anim.SetBool("isAtk", false);
                 break;
             case EnemyState.Exit:
                 anim.SetBool("isExit", false);
@@ -174,6 +175,9 @@ public class Torch_Combat : MonoBehaviour
                 break;
             case EnemyState.Exit:
                 anim.SetBool("isExit", true);
+                break;
+            case EnemyState.Attacking:
+                anim.SetBool("isAtk", true);
                 break;
         }
     }

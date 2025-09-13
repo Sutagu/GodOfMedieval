@@ -14,7 +14,7 @@ public class BlueFactionCombat : MonoBehaviour
     //Variables
     private bool hasRun = false;
     private bool hasChased = false;
-    private int damage = 15;
+    public int damage = 15;
     private float attackRange = 1.3f;
 
     void Start()
@@ -34,11 +34,13 @@ public class BlueFactionCombat : MonoBehaviour
 
     void Exit()
     {
+        Debug.Log("Still within exit");
+        hasRun = true;
         rb.linearVelocity = Vector2.zero;
         setAnim("horizontal", 0);
         setAnim("vertical", 0);
+        Movement.isRandom = true;
         StartCoroutine(Movement.resumeRNG());
-        hasRun = true;
     }
 
     void Chase()
@@ -92,6 +94,7 @@ public class BlueFactionCombat : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Goblin") && !hasChased)
         {
+            Debug.Log("Entering trigger");
             Movement.isRandom = false;
             target = collision.gameObject.transform;
             setAnim("horizontal", 0);
@@ -99,12 +102,14 @@ public class BlueFactionCombat : MonoBehaviour
             hasChased = true;
             ChangeState(BlueState.Chasing);
         }
+        return;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Goblin"))
         {
+            Debug.Log("Exit trigger");
             hasChased = false;
             ChangeState(BlueState.Exit);
         }
@@ -123,6 +128,8 @@ public class BlueFactionCombat : MonoBehaviour
 
     void ChangeState(BlueState newState)
     {
+        rb.linearVelocity = Vector2.zero;
+        Debug.Log("Changing state to: " + newState);
         Movement.isRandom = false;
 
         switch (blueState)
@@ -137,6 +144,7 @@ public class BlueFactionCombat : MonoBehaviour
                 setAnim("isAttack", false);
                 setAnim("isAttackUp", false);
                 setAnim("isAttackDown", false);
+                setAnim("isAtk",false);
                 break;
         }
         blueState = newState;
@@ -148,6 +156,9 @@ public class BlueFactionCombat : MonoBehaviour
                 break;
             case BlueState.Chasing:
                 setAnim("isChasing", true);
+                break;
+            case BlueState.Attacking:
+                setAnim("isAtk", true);
                 break;
         }
     }

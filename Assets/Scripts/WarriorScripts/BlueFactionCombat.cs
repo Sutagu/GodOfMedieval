@@ -4,6 +4,7 @@ public class BlueFactionCombat : MonoBehaviour
 {
     //Script
     private RNGMovement Movement;
+    private AttackPointWarrior Weapon;
     
     //GameObject components
     private Rigidbody2D rb;
@@ -14,15 +15,17 @@ public class BlueFactionCombat : MonoBehaviour
     //Variables
     private bool hasRun = false;
     private bool hasChased = false;
-    public int damage = 15;
     private float attackRange = 1.3f;
+    public float speed = 2;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         Movement = GetComponent<RNGMovement>();
-        ChangeState(BlueState.Exit);
+        Transform child = transform.GetChild(0);
+        Weapon = child.GetComponent<AttackPointWarrior>();
+        Exit();
     }
     
     void Update()
@@ -34,9 +37,8 @@ public class BlueFactionCombat : MonoBehaviour
 
     void Exit()
     {
-        Debug.Log("Still within exit");
-        hasRun = true;
         rb.linearVelocity = Vector2.zero;
+        hasRun = true;
         setAnim("horizontal", 0);
         setAnim("vertical", 0);
         Movement.isRandom = true;
@@ -61,7 +63,7 @@ public class BlueFactionCombat : MonoBehaviour
             Movement.facingDirection *= -1;
             transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
         }
-        rb.linearVelocity = direction.normalized;
+        rb.linearVelocity = direction.normalized * speed;
     }
 
     void Attacking()
@@ -83,18 +85,13 @@ public class BlueFactionCombat : MonoBehaviour
             ChangeState(BlueState.Chasing);
         }
     }
-    
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Collision")) return;
-        collision.gameObject.GetComponent<CharacterHealth>().ChangeHealth(-damage);
-    }
+    void EnableHit(string direction) => Weapon.EnableAttack(direction);
+    void DisableHit() => Weapon.DisableAttack();
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.gameObject.CompareTag("Goblin") && !hasChased)
         {
-            Debug.Log("Entering trigger");
             Movement.isRandom = false;
             target = collision.gameObject.transform;
             setAnim("horizontal", 0);
@@ -109,7 +106,6 @@ public class BlueFactionCombat : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Goblin"))
         {
-            Debug.Log("Exit trigger");
             hasChased = false;
             ChangeState(BlueState.Exit);
         }
@@ -130,6 +126,7 @@ public class BlueFactionCombat : MonoBehaviour
     {
         rb.linearVelocity = Vector2.zero;
         Debug.Log("Changing state to: " + newState);
+        hasRun = false;
         Movement.isRandom = false;
 
         switch (blueState)

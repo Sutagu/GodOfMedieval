@@ -14,7 +14,7 @@ public class Torch_Combat : MonoBehaviour
     //Variables
     public float speed = 2;
     public float attackRange = 1.3f;
-    public int damage = 15;
+    public int damage = 10;
     private EnemyState enemyState;
     private bool hasRun = false;
     private bool hasChased = false;
@@ -30,12 +30,6 @@ public class Torch_Combat : MonoBehaviour
         Transform child = transform.GetChild(0);
         Weapon = child.GetComponent<AttackPoint>();
         enemyState = EnemyState.Exit;
-    }
-    //Causing damage when collided
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Collision")) return;
-        collision.gameObject.GetComponent<CharacterHealth>().ChangeHealth(-damage);
     }
 
     
@@ -76,7 +70,7 @@ public class Torch_Combat : MonoBehaviour
             Movement.facingDirection *= -1;
             transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
         }
-        rb.linearVelocity = direction.normalized;
+        rb.linearVelocity = direction.normalized * speed;
     }
 
     void Attacking()

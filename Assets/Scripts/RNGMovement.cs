@@ -30,7 +30,6 @@ public class RNGMovement : MonoBehaviour
         {
             if (isRandom && !anim.GetBool("isAtk"))
             {
-                Debug.Log("Randomly moving");
                 interval = RNGRange(true);
                 horizontal = RNGRange(false);
                 vertical = RNGRange(false);
@@ -54,7 +53,7 @@ public class RNGMovement : MonoBehaviour
     
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Collision"))
+        if (collision.gameObject.CompareTag("Collision") && !anim.GetBool("isChasing"))
         {
             horizontal = -horizontal;
             vertical = -vertical;

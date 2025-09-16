@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BlueFactionCombat : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class BlueFactionCombat : MonoBehaviour
     private Animator anim;
     private Transform target;
     private BlueState blueState;
+    NavMeshAgent agent;
 
     //Variables
     private bool hasRun = false;
@@ -25,6 +27,10 @@ public class BlueFactionCombat : MonoBehaviour
         Movement = GetComponent<RNGMovement>();
         Transform child = transform.GetChild(0);
         Weapon = child.GetComponent<AttackPointWarrior>();
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+
         Exit();
     }
     
@@ -56,18 +62,20 @@ public class BlueFactionCombat : MonoBehaviour
             ChangeState(BlueState.Attacking);
             return;
         }
-        Vector2 direction = new Vector2(x, y);
+        //Vector2 direction = new Vector2(x, y);
 
         if ((x > 0 && transform.localScale.x < 0) || (x < 0 && transform.localScale.x > 0))
         {
             Movement.facingDirection *= -1;
             transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
         }
-        rb.linearVelocity = direction.normalized * speed;
+        agent.SetDestination(target.position);
+        //rb.linearVelocity = direction.normalized * speed;
     }
 
     void Attacking()
     {
+        agent.ResetPath();
         float[] values = getVectorValues();
         float x = values[0];
         float y = values[1];
